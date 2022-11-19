@@ -1,5 +1,7 @@
 # GrowattESPHome
-ESPHome based code for Growatt inverters
+ESPHome based code for Growatt inverters, in this example used with Home Assistant.
+
+
 
 # Description
 The code (growatt.yaml) can be used on a ESP8266 with a TTL-to-RS485 adapter, or by putting the Growatt ShineWifi-X into boot mode and flashing it with ESPHome.
