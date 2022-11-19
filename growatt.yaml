@@ -1,0 +1,143 @@
+esphome:
+  name: growatt
+  on_boot:
+    priority: 600
+    then:
+      - lambda: |-        
+          delay(60000);
+  project:
+    name: PVPro.ShineWifi-X
+    version: "1.0"
+
+esp8266:
+  board: esp07s
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "*INSERT YOUR OWN KEY HERE*"
+
+ota:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Growatt Fallback Hotspot"
+    password: "12345678"
+
+  # Enable Web server
+web_server:
+  port: 80
+
+captive_portal:
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+output:
+# Blue Led
+  - id: light_bl
+    platform: gpio
+    pin: 16
+# Green Led
+  - id: light_gr
+    platform: gpio
+    pin: 0
+# Red Led
+  - id: light_rd
+    platform: gpio
+    pin: 2
+
+uart:
+  - id: uart1
+    baud_rate: 115200
+    tx_pin: GPIO1
+    rx_pin: GPIO3
+
+modbus:
+  uart_id: uart1
+  flow_control_pin: GPIO4
+
+# For newer inverters use protocol_version "RTU2" like below. Certain older models require "RTU".
+sensor:
+  - platform: growatt_solar
+    update_interval: 5s
+    protocol_version: RTU2
+
+    inverter_status:
+      name: "Growatt Status Code"
+    phase_a:
+      voltage:
+          name: "Growatt Voltage Phase A"
+      current:
+          name: "Growatt Current Phase A"
+      active_power:
+          name: "Growatt Power Phase A"
+    phase_b:
+      voltage:
+          name: "Growatt Voltage Phase B"
+      current:
+          name: "Growatt Current Phase B"
+      active_power:
+          name: "Growatt Power Phase B"
+    phase_c:
+      voltage:
+          name: "Growatt Voltage Phase C"
+      current:
+          name: "Growatt Current Phase C"
+      active_power:
+          name: "Growatt Power Phase C"
+    pv1:
+      voltage:
+          name: "Growatt PV1 Voltage"
+      current:
+          name: "Growatt PV1 Current"
+      active_power:
+          name: "Growatt PV1 Active Power"
+    pv2:
+      voltage:
+          name: "Growatt PV2 Voltage"
+      current:
+          name: "Growatt PV2 Current"
+      active_power:
+          name: "Growatt PV2 Active Power"
+    active_power:
+      name: "Growatt Grid Active Power"
+    pv_active_power:
+      name: "Growatt PV Active Power"
+    frequency:
+      name: "Growatt Frequency"
+    energy_production_day:
+      name: "Growatt Today's Generation"
+      accuracy_decimals: 1
+    total_energy_production:
+      name: "Growatt Total Energy Production"
+      accuracy_decimals: 1
+    inverter_module_temp:
+      name: "Growatt Inverter Module Temp"
+  - platform: uptime
+    name: "Growatt Uptime"
+    update_interval: 60s
+  - platform: wifi_signal
+    name: "Growatt Wi-Fi Signal"
+    update_interval: 60s
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "Growatt IP Address"
+    ssid:
+      name: "Growatt Wi-Fi SSID"
+    bssid:
+      name: "Growatt Wi-Fi BSSID"
+  - platform: version
+    name: "ESPHome Version"
+    hide_timestamp: true
