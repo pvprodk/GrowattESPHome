@@ -12,3 +12,4 @@ To flash the ShineWifi-X with ESPHome you need to put it into boot mode, by jump
 You can also build you own, using a ESP8266 and a TTL-to-RS485 adapter, based on the scematics below (credit to [the author](https://www.youtube.com/watch?v=znwNZstQqYE))
 ![Diagram](https://i.imgur.com/jVm6FFr.png)
 Be sure to edit the board type and pins to your specific configuration.
+Remember to terminate the RS485 circuit with a 120ohm resistor
