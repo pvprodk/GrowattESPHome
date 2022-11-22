@@ -7,7 +7,7 @@ ESPHome based code for Growatt inverters, in this example used with Home Assista
 - The code (growatt.yaml) can be used on a ESP8266 with a TTL-to-RS485 adapter, or by putting the Growatt ShineWifi-X into boot mode and flashing it with ESPHome.
 - This configuration pulls data every 5 seconds, feel free to adjust to your likings.
 - Please note that there are two protocol_versions. Newer Growatt inverters, that comes with a ShineWifi-X uses RTU2. Older versions use RTU.
-- This code is tested on Growatt MOD XXXTL3-X and SPHXXXXTL3 BH UP
+- This code is tested on Growatt MOD XXXTL3-X and SPHXXXXTL3 BH UP (running protocol_version: RTU2)
 - ESPHome 2022.4.0 or newer required
 
 # Using the ShineWifi-X
