@@ -8,6 +8,7 @@ ESPHome based code for Growatt inverters, in this example used with Home Assista
 - This configuration pulls data every 5 seconds, feel free to adjust to your likings.
 - Please note that there are two protocol_versions. Newer Growatt inverters, that comes with a ShineWifi-X uses RTU2. Older versions use RTU.
 - This code is tested on Growatt MOD XXXTL3-X and SPHXXXXTL3 BH UP
+- ESPHome 2022.4.0 or newer required
 
 # Using the ShineWifi-X
 To flash the ShineWifi-X with ESPHome you need to put it into boot mode, by jumping the GPIO0 and GND pins while plugging in/powering on the USB-device. Important to remove the jumper before you flash:
