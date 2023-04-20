@@ -57,13 +57,13 @@ output:
     pin: 2
 
 uart:
-  - id: uart1
+  - id: uart_id1
     baud_rate: 115200
     tx_pin: GPIO1
     rx_pin: GPIO3
 
 modbus:
-  uart_id: uart1
+  uart_id: uart_id1
   flow_control_pin: GPIO4
 
 # For newer inverters use protocol_version "RTU2" like below. Certain older models require "RTU".
