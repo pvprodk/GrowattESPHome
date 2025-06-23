@@ -1,3 +1,9 @@
+substitutions:
+  device_name: Growatt
+  device_description: "Esphome for Growatt"
+  modbus_update_interval: 15s
+  skip_updates_slow: "6" 
+
 esphome:
   name: growatt
   on_boot:
@@ -7,7 +13,7 @@ esphome:
           delay(60000);
   project:
     name: PVPro.ShineWifi-X
-    version: "1.0"
+    version: "2.0"
 
 esp8266:
   board: esp07s
@@ -22,6 +28,7 @@ api:
     key: "*INSERT YOUR OWN KEY HERE*"
 
 ota:
+  - platform: esphome
 
 wifi:
   ssid: !secret wifi_ssid
@@ -63,81 +70,423 @@ uart:
     rx_pin: GPIO3
 
 modbus:
+  id: modbus1
   uart_id: uart_id1
   flow_control_pin: GPIO4
 
-# For newer inverters use protocol_version "RTU2" like below. Certain older models require "RTU".
-sensor:
-  - platform: growatt_solar
-    update_interval: 5s
-    protocol_version: RTU2
+modbus_controller:
+  - id: growatt
+    ## the Modbus device addr
+    address: 0x1
+    modbus_id: modbus1
+    setup_priority: -10
+    update_interval: ${modbus_update_interval}   
 
-    inverter_status:
-      name: "Growatt Status Code"
-    phase_a:
-      voltage:
-          name: "Growatt Voltage Phase A"
-      current:
-          name: "Growatt Current Phase A"
-      active_power:
-          name: "Growatt Power Phase A"
-    phase_b:
-      voltage:
-          name: "Growatt Voltage Phase B"
-      current:
-          name: "Growatt Current Phase B"
-      active_power:
-          name: "Growatt Power Phase B"
-    phase_c:
-      voltage:
-          name: "Growatt Voltage Phase C"
-      current:
-          name: "Growatt Current Phase C"
-      active_power:
-          name: "Growatt Power Phase C"
-    pv1:
-      voltage:
-          name: "Growatt PV1 Voltage"
-      current:
-          name: "Growatt PV1 Current"
-      active_power:
-          name: "Growatt PV1 Active Power"
-    pv2:
-      voltage:
-          name: "Growatt PV2 Voltage"
-      current:
-          name: "Growatt PV2 Current"
-      active_power:
-          name: "Growatt PV2 Active Power"
-    active_power:
-      name: "Growatt Grid Active Power"
-    pv_active_power:
-      name: "Growatt PV Active Power"
-    frequency:
-      name: "Growatt Frequency"
-    energy_production_day:
-      name: "Growatt Today's Generation"
-      accuracy_decimals: 1
-    total_energy_production:
-      name: "Growatt Total Energy Production"
-      accuracy_decimals: 1
-    inverter_module_temp:
-      name: "Growatt Inverter Module Temp"
+number:
+  - platform: modbus_controller
+    modbus_controller_id: growatt
+    id: remote_on_off
+    name: "${device_name} Remote On/Off" # Inverter Off:0, Inverter On:1, BDC Off: 2, BDC On: 3
+    address: 0
+    register_type: holding
+    value_type: U_WORD
+    min_value: 0
+    max_value: 3
+    step: 1
+    icon: mdi:eye
+    entity_category: diagnostic
+
+  - platform: modbus_controller
+    modbus_controller_id: growatt
+    id: max_output_power
+    name: "${device_name} Max Output Power"
+    address: 3
+    register_type: holding
+    value_type: U_WORD
+    min_value: 0
+    max_value: 100
+    step: 1
+    unit_of_measurement:  "%"
+    entity_category: config    
+
+sensor:
+  - platform: modbus_controller
+    name: "${device_name} status_code"
+    skip_updates: $skip_updates_slow
+    address: 0
+    register_type: "read"
+    internal: true
+    accuracy_decimals: 0
+    id: status
+
+  - platform: modbus_controller
+    name: "${device_name} Input Power"
+    address: 1
+    register_type: "read"
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+    icon: mdi:solar-power-variant
+    value_type: U_WORD
+    accuracy_decimals: 0
+    filters:
+      - multiply: 0.1      
+  
+  - platform: modbus_controller
+    name: "${device_name} PV1 voltage"
+    address: 3
+    register_type: "read"
+    unit_of_measurement: V
+    device_class: voltage
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 0
+    filters:
+    - multiply: 0.1
+    
+  - platform: modbus_controller
+    name: "${device_name} PV1 current"
+    address: 4
+    register_type: "read"
+    unit_of_measurement: A
+    device_class: current
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} PV1 Active power"
+    id: pv1_power
+    address: 5
+    register_type: "read"
+    unit_of_measurement: W
+    device_class: power
+    icon: mdi:flash
+    value_type: U_DWORD
+    accuracy_decimals: 0
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} PV2 voltage"
+    address: 7
+    register_type: "read"
+    unit_of_measurement: V
+    device_class: voltage
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 0
+    filters:
+    - multiply: 0.1
+    
+  - platform: modbus_controller
+    name: "${device_name} PV2 current"
+    address: 8
+    register_type: "read"
+    unit_of_measurement: A
+    device_class: current
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} PV2 Active power"
+    id: pv2_power
+    address: 9
+    register_type: "read"
+    unit_of_measurement: W
+    device_class: power
+    icon: mdi:flash
+    value_type: U_DWORD
+    accuracy_decimals: 0
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} Frequency"
+    address: 37
+    register_type: "read"
+    unit_of_measurement: Hz
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.01
+
+  - platform: modbus_controller
+    name: "${device_name} Voltage Phase A"
+    address: 38
+    register_type: "read"
+    unit_of_measurement: V
+    device_class: voltage
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} Voltage Phase B"
+    address: 42
+    register_type: "read"
+    unit_of_measurement: V
+    device_class: voltage
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} Voltage Phase C"
+    address: 46
+    register_type: "read"
+    unit_of_measurement: V
+    device_class: voltage
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} Current Phase A"
+    address: 39
+    register_type: "read"
+    unit_of_measurement: A
+    device_class: current
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} Current Phase B"
+    address: 43
+    register_type: "read"
+    unit_of_measurement: A
+    device_class: current
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} Current Phase C"
+    address: 47
+    register_type: "read"
+    unit_of_measurement: A
+    device_class: current
+    icon: mdi:flash
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+
+  - platform: modbus_controller
+    name: "${device_name} Power Phase A"
+    address: 40
+    register_type: "read"
+    unit_of_measurement: W
+    device_class: power
+    icon: mdi:flash
+    value_type: U_DWORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1    
+
+  - platform: modbus_controller
+    name: "${device_name} Power Phase B"
+    address: 44
+    register_type: "read"
+    unit_of_measurement: W
+    device_class: power
+    icon: mdi:flash
+    value_type: U_DWORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1      
+
+  - platform: modbus_controller
+    name: "${device_name} Power Phase C"
+    address: 48
+    register_type: "read"
+    unit_of_measurement: W
+    device_class: power
+    icon: mdi:flash
+    value_type: U_DWORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1      
+
+  - platform: modbus_controller
+    name: "${device_name} Grid Active Power"
+    address: 35
+    register_type: "read"
+    unit_of_measurement: W
+    device_class: power
+    icon: mdi:solar-power
+    value_type: U_DWORD
+    accuracy_decimals: 0
+    filters:
+    - multiply: 0.1    
+
+  - platform: template
+    id: pv_power
+    name: "${device_name} PV Active Power"
+    unit_of_measurement: W
+    device_class: power
+    state_class: measurement
+    icon: mdi:solar-power-variant
+    accuracy_decimals: 0
+    lambda: |-
+      return float((id(pv1_power).state + id(pv2_power).state));   
+
+  - platform: modbus_controller
+    name: "${device_name} Today's Generation"
+    skip_updates: $skip_updates_slow
+    address: 53
+    register_type: "read"
+    unit_of_measurement: kWh
+    state_class: total_increasing
+    device_class: energy
+    icon: mdi:solar-power
+    value_type: U_DWORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1   
+
+  - platform: modbus_controller
+    name: "${device_name} Total Energy Production"
+    skip_updates: $skip_updates_slow
+    address: 55
+    register_type: "read"
+    unit_of_measurement: kWh
+    state_class: total_increasing
+    device_class: energy
+    icon: mdi:solar-power
+    value_type: U_DWORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1    
+
+  - platform: modbus_controller
+    name: "${device_name} Inverter Module Temp"
+    address: 93
+    register_type: "read"
+    unit_of_measurement: °C
+    device_class: temperature
+    entity_category: diagnostic
+    icon: mdi:thermometer
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+    skip_updates: $skip_updates_slow   
+
   - platform: uptime
-    name: "Growatt Uptime"
+    name: "${device_name}  Uptime"
     update_interval: 60s
   - platform: wifi_signal
-    name: "Growatt Wi-Fi Signal"
-    update_interval: 60s
+    name: "${device_name}  Wi-Fi Signal"
+    update_interval: 60s    
+
+select:
+  - platform: modbus_controller
+    name: "${device_name} AC Charging"
+    icon: mdi:battery-charging-100
+    address: 1092
+    value_type: U_WORD
+    optionsmap:
+      "Disabled": 0
+      "Enabled": 1
+    skip_updates: $skip_updates_slow
+
+  - platform: modbus_controller
+    name: "${device_name} Inverter Priority"
+    icon: mdi:arrow-decision-outline
+    address: 1044
+    value_type: U_WORD
+    optionsmap:
+      "Load First": 0
+      "Battery First": 1
+      "Grid First": 2  
+    skip_updates: $skip_updates_slow
 
 text_sensor:
   - platform: wifi_info
     ip_address:
-      name: "Growatt IP Address"
+      name: "${device_name}  IP Address"
     ssid:
-      name: "Growatt Wi-Fi SSID"
+      name: "${device_name}  Wi-Fi SSID"
     bssid:
-      name: "Growatt Wi-Fi BSSID"
+      name: "${device_name}  Wi-Fi BSSID"
   - platform: version
     name: "ESPHome Version"
     hide_timestamp: true
+
+  - platform: template
+    name: "${device_name} Status state"
+    icon: mdi:eye
+    entity_category: diagnostic
+    lambda: |-
+      if ((id(status).state) == 1) {
+        return {"Normal"};
+      } else if ((id(status).state) == 0)  {
+        return {"Standby"};
+      } else if ((id(status).state) == 2)  {
+        return {"Discharge"};
+      } else if ((id(status).state) == 3)  {
+        return {"Fault"};
+      } else if ((id(status).state) == 4)  {
+        return {"Flash"};
+      } else if ((id(status).state) == 5)  {
+        return {"PV Charging"};
+      } else if ((id(status).state) == 6)  {
+        return {"AC Charging"};
+      } else if ((id(status).state) == 7)  {
+        return {"Combined Charging"};
+      } else if ((id(status).state) == 8)  {
+        return {"Combined Charging & Bypass"};
+      } else if ((id(status).state) == 9)  {
+        return {"PV Charging & Bypass"};
+      } else if ((id(status).state) == 10)  {
+        return {"AC Charging & Bypass"};
+      } else if ((id(status).state) == 11)  {
+        return {"Bypass"};
+      } else if (id(status).state == 12)  {
+        return {"PV Charge and Discharge"};
+      } else {
+        return {"Unknown"};
+      }
+
+  - platform: modbus_controller
+    name: "${device_name} Fault code"
+    address: 105
+    register_type: "read"
+    icon: mdi:eye
+    entity_category: diagnostic
+    raw_encode: HEXBYTES
+    lambda: |-
+      uint16_t value = modbus_controller::word_from_hex_str(x, 0);
+      switch (value) {
+        case 0:  return std::string("No error");
+        case 24: return std::string("Auto test failed");
+        case 25: return std::string("No AC connection");
+        case 26: return std::string("PV isolation low");
+        case 27: return std::string("Residual I high");
+        case 28: return std::string("Output high DCI");
+        case 29: return std::string("PV voltage high");
+        case 30: return std::string("AC voltage out of range");
+        case 31: return std::string("AC frequency out of range");
+        case 32: return std::string("Module too hot");
+        // case 1~23 " Error: 99+x
+        default: return std::string("Fault code: " + to_string(value));
+      }
+      return x;    
