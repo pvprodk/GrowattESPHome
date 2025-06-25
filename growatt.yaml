@@ -86,7 +86,7 @@ number:
   - platform: modbus_controller
     modbus_controller_id: growatt
     id: remote_on_off
-    name: "${device_name} Remote On/Off" # Inverter Off:0, Inverter On:1, BDC Off: 2, BDC On: 3
+    name: "Remote On/Off" # Inverter Off:0, Inverter On:1, BDC Off: 2, BDC On: 3
     address: 0
     register_type: holding
     value_type: U_WORD
@@ -99,7 +99,7 @@ number:
   - platform: modbus_controller
     modbus_controller_id: growatt
     id: max_output_power
-    name: "${device_name} Max Output Power"
+    name: "Max Output Power"
     address: 3
     register_type: holding
     value_type: U_WORD
@@ -111,7 +111,7 @@ number:
 
 sensor:
   - platform: modbus_controller
-    name: "${device_name} status_code"
+    name: "status_code"
     skip_updates: $skip_updates_slow
     address: 0
     register_type: "read"
@@ -120,7 +120,7 @@ sensor:
     id: status
 
   - platform: modbus_controller
-    name: "${device_name} Input Power"
+    name: "Input Power"
     address: 1
     register_type: "read"
     unit_of_measurement: W
@@ -133,11 +133,12 @@ sensor:
       - multiply: 0.1      
   
   - platform: modbus_controller
-    name: "${device_name} PV1 voltage"
+    name: "PV1 voltage"
     address: 3
     register_type: "read"
     unit_of_measurement: V
     device_class: voltage
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 0
@@ -145,11 +146,12 @@ sensor:
     - multiply: 0.1
     
   - platform: modbus_controller
-    name: "${device_name} PV1 current"
+    name: "PV1 current"
     address: 4
     register_type: "read"
     unit_of_measurement: A
     device_class: current
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -157,12 +159,13 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} PV1 Active power"
+    name: "PV1 Active power"
     id: pv1_power
     address: 5
     register_type: "read"
     unit_of_measurement: W
     device_class: power
+    state_class: measurement
     icon: mdi:flash
     value_type: U_DWORD
     accuracy_decimals: 0
@@ -170,11 +173,12 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} PV2 voltage"
+    name: "PV2 voltage"
     address: 7
     register_type: "read"
     unit_of_measurement: V
     device_class: voltage
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 0
@@ -182,11 +186,12 @@ sensor:
     - multiply: 0.1
     
   - platform: modbus_controller
-    name: "${device_name} PV2 current"
+    name: "PV2 current"
     address: 8
     register_type: "read"
     unit_of_measurement: A
     device_class: current
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -194,12 +199,13 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} PV2 Active power"
+    name: "PV2 Active power"
     id: pv2_power
     address: 9
     register_type: "read"
     unit_of_measurement: W
     device_class: power
+    state_class: measurement
     icon: mdi:flash
     value_type: U_DWORD
     accuracy_decimals: 0
@@ -207,10 +213,11 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} Frequency"
+    name: "Frequency"
     address: 37
     register_type: "read"
     unit_of_measurement: Hz
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -218,11 +225,12 @@ sensor:
     - multiply: 0.01
 
   - platform: modbus_controller
-    name: "${device_name} Voltage Phase A"
+    name: "Voltage Phase A"
     address: 38
     register_type: "read"
     unit_of_measurement: V
     device_class: voltage
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -230,11 +238,12 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} Voltage Phase B"
+    name: "Voltage Phase B"
     address: 42
     register_type: "read"
     unit_of_measurement: V
     device_class: voltage
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -242,11 +251,12 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} Voltage Phase C"
+    name: "Voltage Phase C"
     address: 46
     register_type: "read"
     unit_of_measurement: V
     device_class: voltage
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -254,11 +264,12 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} Current Phase A"
+    name: "Current Phase A"
     address: 39
     register_type: "read"
     unit_of_measurement: A
     device_class: current
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -266,11 +277,12 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} Current Phase B"
+    name: "Current Phase B"
     address: 43
     register_type: "read"
     unit_of_measurement: A
     device_class: current
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -278,11 +290,12 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} Current Phase C"
+    name: "Current Phase C"
     address: 47
     register_type: "read"
     unit_of_measurement: A
     device_class: current
+    state_class: measurement
     icon: mdi:flash
     value_type: U_WORD
     accuracy_decimals: 1
@@ -290,11 +303,12 @@ sensor:
     - multiply: 0.1
 
   - platform: modbus_controller
-    name: "${device_name} Power Phase A"
+    name: "Power Phase A"
     address: 40
     register_type: "read"
     unit_of_measurement: W
     device_class: power
+    state_class: measurement
     icon: mdi:flash
     value_type: U_DWORD
     accuracy_decimals: 1
@@ -302,11 +316,12 @@ sensor:
     - multiply: 0.1    
 
   - platform: modbus_controller
-    name: "${device_name} Power Phase B"
+    name: "Power Phase B"
     address: 44
     register_type: "read"
     unit_of_measurement: W
     device_class: power
+    state_class: measurement
     icon: mdi:flash
     value_type: U_DWORD
     accuracy_decimals: 1
@@ -314,11 +329,12 @@ sensor:
     - multiply: 0.1      
 
   - platform: modbus_controller
-    name: "${device_name} Power Phase C"
+    name: "Power Phase C"
     address: 48
     register_type: "read"
     unit_of_measurement: W
     device_class: power
+    state_class: measurement
     icon: mdi:flash
     value_type: U_DWORD
     accuracy_decimals: 1
@@ -326,11 +342,12 @@ sensor:
     - multiply: 0.1      
 
   - platform: modbus_controller
-    name: "${device_name} Grid Active Power"
+    name: "Grid Active Power"
     address: 35
     register_type: "read"
     unit_of_measurement: W
     device_class: power
+    state_class: measurement
     icon: mdi:solar-power
     value_type: U_DWORD
     accuracy_decimals: 0
@@ -339,7 +356,7 @@ sensor:
 
   - platform: template
     id: pv_power
-    name: "${device_name} PV Active Power"
+    name: "PV Active Power"
     unit_of_measurement: W
     device_class: power
     state_class: measurement
@@ -349,7 +366,7 @@ sensor:
       return float((id(pv1_power).state + id(pv2_power).state));   
 
   - platform: modbus_controller
-    name: "${device_name} Today's Generation"
+    name: "Today's Generation"
     skip_updates: $skip_updates_slow
     address: 53
     register_type: "read"
@@ -363,7 +380,7 @@ sensor:
     - multiply: 0.1   
 
   - platform: modbus_controller
-    name: "${device_name} Total Energy Production"
+    name: "Total Energy Production"
     skip_updates: $skip_updates_slow
     address: 55
     register_type: "read"
@@ -377,11 +394,12 @@ sensor:
     - multiply: 0.1    
 
   - platform: modbus_controller
-    name: "${device_name} Inverter Module Temp"
+    name: "Inverter Module Temp"
     address: 93
     register_type: "read"
     unit_of_measurement: °C
     device_class: temperature
+    state_class: measurement
     entity_category: diagnostic
     icon: mdi:thermometer
     value_type: U_WORD
@@ -391,15 +409,15 @@ sensor:
     skip_updates: $skip_updates_slow   
 
   - platform: uptime
-    name: "${device_name}  Uptime"
+    name: " Uptime"
     update_interval: 60s
   - platform: wifi_signal
-    name: "${device_name}  Wi-Fi Signal"
+    name: " Wi-Fi Signal"
     update_interval: 60s    
 
 select:
   - platform: modbus_controller
-    name: "${device_name} AC Charging"
+    name: "AC Charging"
     icon: mdi:battery-charging-100
     address: 1092
     value_type: U_WORD
@@ -409,7 +427,7 @@ select:
     skip_updates: $skip_updates_slow
 
   - platform: modbus_controller
-    name: "${device_name} Inverter Priority"
+    name: "Inverter Priority"
     icon: mdi:arrow-decision-outline
     address: 1044
     value_type: U_WORD
@@ -422,17 +440,17 @@ select:
 text_sensor:
   - platform: wifi_info
     ip_address:
-      name: "${device_name}  IP Address"
+      name: " IP Address"
     ssid:
-      name: "${device_name}  Wi-Fi SSID"
+      name: " Wi-Fi SSID"
     bssid:
-      name: "${device_name}  Wi-Fi BSSID"
+      name: " Wi-Fi BSSID"
   - platform: version
     name: "ESPHome Version"
     hide_timestamp: true
 
   - platform: template
-    name: "${device_name} Status state"
+    name: "Status state"
     icon: mdi:eye
     entity_category: diagnostic
     lambda: |-
@@ -467,7 +485,7 @@ text_sensor:
       }
 
   - platform: modbus_controller
-    name: "${device_name} Fault code"
+    name: "Fault code"
     address: 105
     register_type: "read"
     icon: mdi:eye
