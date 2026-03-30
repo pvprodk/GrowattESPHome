@@ -12,6 +12,7 @@ ESPHome based code for Growatt inverters, in this example used with Home Assista
 - Latest update to the code with inspriation from https://github.com/klatremis/esphome-for-growatt/ and https://github.com/WilbertVerhoeff/Growatt/
 
 # Using the ShineWifi-X
+NOTE: Newer ShineWifi-X is equipped with an ESP8266 that has 4MB flash. In this case you have to change the code from esp07s to esp12e
 To flash the ShineWifi-X with ESPHome you need to put it into boot mode, by jumping the GPIO0 and GND pins while plugging in/powering on the USB-device. Important to remove the jumper before you flash:
 
 ![These pins need to be shorted to put the ShineWifi-X into boot mode](https://i.imgur.com/IZa4ood.jpg)
