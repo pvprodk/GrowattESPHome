@@ -508,4 +508,38 @@ text_sensor:
         // case 1~23 " Error: 99+x
         default: return std::string("Fault code: " + to_string(value));
       }
-      return x;    
+      return x;
+
+  - platform: modbus_controller
+    name: "Serial Number"
+    address: 23
+    register_type: holding
+    register_count: 5
+    response_size: 10
+    entity_category: diagnostic
+    icon: mdi:barcode
+    raw_encode: HEXBYTES
+    lambda: |-
+      std::string result;
+      for (size_t i = 0; i + 1 < x.length(); i += 2) {
+        char chr = (char) strtol(x.substr(i, 2).c_str(), nullptr, 16);
+        if (chr != 0) result += chr;
+      }
+      return result;
+
+  - platform: modbus_controller
+    name: "Firmware Version"
+    address: 9
+    register_type: holding
+    register_count: 3
+    response_size: 6
+    entity_category: diagnostic
+    icon: mdi:chip
+    raw_encode: HEXBYTES
+    lambda: |-
+      std::string result;
+      for (size_t i = 0; i + 1 < x.length(); i += 2) {
+        char chr = (char) strtol(x.substr(i, 2).c_str(), nullptr, 16);
+        if (chr != 0) result += chr;
+      }
+      return result;
