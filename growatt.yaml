@@ -395,7 +395,7 @@ sensor:
     - multiply: 0.1    
 
   - platform: modbus_controller
-    name: "Inverter Module Temp"
+    name: "Inverter Module Temperature"
     address: 93
     register_type: "read"
     unit_of_measurement: °C
@@ -415,6 +415,66 @@ sensor:
   - platform: wifi_signal
     name: " Wi-Fi Signal"
     update_interval: 60s    
+
+###Battery sensors start###
+  - platform: modbus_controller
+    name: "Battery voltage"
+    address: 1013
+    register_type: "read"
+    unit_of_measurement: V
+    device_class: voltage
+    state_class: measurement
+    icon: mdi:battery-charging-100
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1    
+
+  - platform: modbus_controller
+    name: "Battery SOC"
+    address: 1014
+    register_type: "read"
+    unit_of_measurement: "%"
+    state_class: measurement
+    icon: mdi:battery
+    value_type: U_WORD
+    accuracy_decimals: 0
+
+  - platform: modbus_controller
+    name: "BMS SOC"
+    address: 1086
+    register_type: "read"
+    unit_of_measurement: "%"
+    state_class: measurement
+    icon: mdi:battery
+    value_type: U_WORD
+    accuracy_decimals: 0
+
+  - platform: modbus_controller
+    name: "BMS SOH"
+    address: 1096
+    register_type: "read"
+    unit_of_measurement: "%"
+    state_class: measurement
+    icon: mdi:battery
+    value_type: U_WORD
+    accuracy_decimals: 0
+
+  - platform: modbus_controller
+    name: "Battery Temperature"
+    address: 1089
+    register_type: "read"
+    unit_of_measurement: °C
+    device_class: temperature
+    state_class: measurement
+    entity_category: diagnostic
+    icon: mdi:thermometer
+    value_type: U_WORD
+    accuracy_decimals: 1
+    filters:
+    - multiply: 0.1
+    skip_updates: $skip_updates_slow   
+###Battery sensors end###       
 
 select:
   - platform: modbus_controller
