@@ -9,7 +9,7 @@ ESPHome based code for Growatt inverters, in this example used with Home Assista
 - Please note that there are two protocol_versions. Newer Growatt inverters, that comes with a ShineWifi-X uses RTU2. Older versions use RTU.
 - This code is tested on Growatt MIN/MOD XXXTL3-X/XH/XE (other Growatt inverters running protocol_version: RTU2 might also be supported (Let me know if you tested with SPH inverter))
 - ESPHome 2022.4.0 or newer required
-- 2026-09-07: Added battery-sensors codeline 419-477, please remove these if you don't have battery connected to the inverter.
+- 2026-09-07: Added battery-sensors codeline 419-477, please remove these if you don't have battery connected to the inverter. Currently untested. Let me know if they work for you.
 
 # Using the ShineWifi-X
 NOTE: Newer ShineWifi-X is equipped with an ESP8266 that has 4MB flash. In this case you have to change the code from esp07s to esp12e.
