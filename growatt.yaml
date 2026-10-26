@@ -2,10 +2,10 @@ substitutions:
   device_name: Growatt
   device_description: "Esphome for Growatt"
   modbus_update_interval: 15s
-  skip_updates_slow: "6" 
 
 esphome:
   name: growatt
+  min_version: 2026.4.0
   on_boot:
     priority: 600
     then:
@@ -113,7 +113,6 @@ number:
 sensor:
   - platform: modbus_controller
     name: "status_code"
-    skip_updates: $skip_updates_slow
     address: 0
     register_type: "read"
     internal: true
@@ -368,7 +367,6 @@ sensor:
 
   - platform: modbus_controller
     name: "Today's Generation"
-    skip_updates: $skip_updates_slow
     address: 53
     register_type: "read"
     unit_of_measurement: kWh
@@ -382,7 +380,6 @@ sensor:
 
   - platform: modbus_controller
     name: "Total Energy Production"
-    skip_updates: $skip_updates_slow
     address: 55
     register_type: "read"
     unit_of_measurement: kWh
@@ -407,7 +404,6 @@ sensor:
     accuracy_decimals: 1
     filters:
     - multiply: 0.1
-    skip_updates: $skip_updates_slow   
 
   - platform: uptime
     name: " Uptime"
@@ -473,7 +469,6 @@ sensor:
     accuracy_decimals: 1
     filters:
     - multiply: 0.1
-    skip_updates: $skip_updates_slow   
 ###Battery sensors end###       
 
 select:
@@ -485,7 +480,6 @@ select:
     optionsmap:
       "Disabled": 0
       "Enabled": 1
-    skip_updates: $skip_updates_slow
 
   - platform: modbus_controller
     name: "Inverter Priority"
@@ -496,7 +490,6 @@ select:
       "Load First": 0
       "Battery First": 1
       "Grid First": 2  
-    skip_updates: $skip_updates_slow
 
 text_sensor:
   - platform: wifi_info
@@ -574,7 +567,6 @@ text_sensor:
     name: "Serial Number"
     address: 23
     register_type: holding
-    register_count: 5
     response_size: 10
     entity_category: diagnostic
     icon: mdi:barcode
@@ -591,7 +583,6 @@ text_sensor:
     name: "Firmware Version"
     address: 9
     register_type: holding
-    register_count: 3
     response_size: 6
     entity_category: diagnostic
     icon: mdi:chip
